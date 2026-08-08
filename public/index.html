@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevPulse | Python Full-Stack App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-center p-6">
+    <div class="max-w-md w-full bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700">
+        <h1 class="text-2xl font-bold text-emerald-400 mb-2">DevPulse Dashboard</h1>
+        <p class="text-slate-400 text-sm mb-6">Powered by Python (Flask) on Vercel Serverless.</p>
+        
+        <div class="mb-6">
+            <button onclick="fetchApiData()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold py-2 px-4 rounded-lg transition">
+                Test Python Backend API
+            </button>
+            <div id="apiResponse" class="mt-3 p-3 bg-slate-900 rounded-lg text-xs text-emerald-300 font-mono hidden"></div>
+        </div>
+
+        <div>
+            <input type="text" id="userInput" placeholder="Type something to analyze..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm mb-3 focus:outline-none focus:border-emerald-500">
+            <button onclick="sendPostData()" class="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-semibold py-2 px-4 rounded-lg transition">
+                Analyze Text via Python
+            </button>
+            <div id="postResponse" class="mt-3 p-3 bg-slate-900 rounded-lg text-xs text-cyan-300 font-mono hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchApiData() {
+            const res = await fetch('/api/hello');
+            const data = await res.json();
+            const box = document.getElementById('apiResponse');
+            box.classList.remove('hidden');
+            box.innerText = JSON.stringify(data, null, 2);
+        }
+
+        async function sendPostData() {
+            const text = document.getElementById('userInput').value;
+            const res = await fetch('/api/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            const data = await res.json();
+            const box = document.getElementById('postResponse');
+            box.classList.remove('hidden');
+            box.innerText = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
